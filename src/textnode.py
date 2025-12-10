@@ -1,4 +1,5 @@
 from enum import Enum
+from htmlnode import *
 
 class TextType(Enum):
     TEXT = "text"
@@ -7,6 +8,25 @@ class TextType(Enum):
     CODE = "code"
     LINK = "link"
     IMAGE = "image"
+
+def text_node_to_html_node(text_node):
+    htmlNode = None
+    match text_node.text_type:
+        case TextType.TEXT:
+            htmlNode = LeafNode(tag=None, value=text_node.text)
+        case TextType.BOLD:
+            htmlNode = LeafNode(tag="b", value=text_node.text)
+        case TextType.ITALIC:
+            htmlNode = LeafNode(tag="i", value=text_node.text)
+        case TextType.CODE:
+            htmlNode = LeafNode(tag="code", value=text_node.text)
+        case TextType.LINK:
+            htmlNode = LeafNode(tag="a", value=text_node.text, props={"href":""})
+        case TextType.IMAGE:
+            htmlNode = LeafNode(tag="img", value=text_node.text, props={"src":"","alt":""})
+        case _:
+            raise Exception("Text type does not match any predefined values")
+    return htmlNode
 
 class TextNode:
     def __init__(self,text,text_type,url=None):
