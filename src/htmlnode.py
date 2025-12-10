@@ -36,3 +36,24 @@ class LeafNode(HTMLNode):
             return f"""<{self.tag} {rend_stmt if rend_stmt else ''}>{self.value}</{self.tag}>"""
         
         return f"""<{self.tag}>{self.value}</{self.tag}>"""
+    
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        self.tag = tag
+        self.children = children
+        self.props = props
+
+    def to_html(self):
+        final_html = ''
+        has_tag = True if self.tag else False
+        has_children = True if len(self.children)!=0 else False
+        has_props = True if self.props else False
+
+        if has_tag == False:
+            raise ValueError
+        if has_children == False:
+            raise ValueError("No Children values present")
+        for i in self.children:
+            final_html += i.to_html()
+        
+        return f"<{self.tag}>{final_html}</{self.tag}>"
