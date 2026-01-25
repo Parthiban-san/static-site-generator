@@ -13,7 +13,10 @@ def main():
             LeafNode(None, "Normal text"),
         ],
     )
-    print(extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"))
+    print(split_nodes_link([TextNode(
+        "This is text with an [image](https://i.imgur.com/zjjcJKZ.png) and another [second image](https://i.imgur.com/3elNhQu.png) and [image](https://i.imgur.com/zjjcJKZ.png)",
+        TextType.TEXT,
+    )]))
 
 if __name__ == "__main__":
     main()
