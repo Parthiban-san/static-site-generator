@@ -13,7 +13,7 @@ def main():
             LeafNode(None, "Normal text"),
         ],
     )
-    print(split_nodes_delimiter([TextNode("This is text with a `code``block` word", TextType.TEXT)], "`", TextType.CODE))
+    print(extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"))
 
 if __name__ == "__main__":
     main()
