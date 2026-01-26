@@ -61,3 +61,8 @@ def text_to_textnodes(text):
     image_nodes = split_nodes_image(code_nodes)
     link_nodes = split_nodes_link(image_nodes)
     return link_nodes
+
+def markdown_to_blocks(markdown):
+    md_lines = markdown.split("\n\n")
+    md_lines_new = [x.strip() for x in md_lines if x != '']
+    return md_lines_new
