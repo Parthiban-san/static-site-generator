@@ -86,3 +86,11 @@ This is the same paragraph on a new line
                 "- This is a list\n- with items",
             ],
         )
+
+    def test_block_to_block_type(self):
+        self.assertEqual(block_to_block_type("Test subject"), BlockType.PARAGRAPH)
+        self.assertEqual(block_to_block_type("- Test subject"), BlockType.UNORDERED_LIST)
+        self.assertEqual(block_to_block_type("1. Test subject"), BlockType.ORDERED_LIST)
+        self.assertEqual(block_to_block_type("> Test subject"), BlockType.QUOTE)
+        self.assertEqual(block_to_block_type("""```\n Test subject\n```"""), BlockType.CODE)
+        self.assertEqual(block_to_block_type("""# Heading"""), BlockType.HEADING)
