@@ -21,9 +21,9 @@ def text_node_to_html_node(text_node):
         case TextType.CODE:
             htmlNode = LeafNode(tag="code", value=text_node.text)
         case TextType.LINK:
-            htmlNode = LeafNode(tag="a", value=text_node.text, props={"href":""})
+            htmlNode = LeafNode(tag="a", value=text_node.text, props={"href":text_node.url})
         case TextType.IMAGE:
-            htmlNode = LeafNode(tag="img", value=text_node.text, props={"src":"","alt":""})
+            htmlNode = LeafNode(tag="img", value=text_node.text, props={"src":text_node.url,"alt":""})
         case _:
             raise Exception("Text type does not match any predefined values")
     return htmlNode
