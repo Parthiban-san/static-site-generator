@@ -44,7 +44,7 @@ def extract_title(markdown):
     return html_title.strip()
 
 def generate_page(from_path, template_path, dest_path):
-    print("Generating page from from_path to dest_path using template_path")
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     with open(from_path, 'r') as md_file:
         md_content = md_file.read()
     with open(template_path, 'r') as template_file:
@@ -56,9 +56,21 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, "w") as dest_file:
         dest_file.write(final_html)
 
+def generate_pages_recursive(from_path = "content", dest_path = "public"):
+    if not os.path.exists(dest_path):
+        os.mkdir(dest_path)
+    for item in os.listdir(from_path):
+        item_path = os.path.join(from_path, item)
+        if os.path.isfile(item_path) or os.path.islink(item_path):
+            generate_page(item_path, "template.html", os.path.join(dest_path, "index.html"))
+        elif os.path.isdir(item_path):
+            generate_pages_recursive(item_path, item_path.replace("content", "public"))
+
+    pass
+
 def main():
     copy_static_to_public()
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive()
 
 if __name__ == "__main__":
     main()

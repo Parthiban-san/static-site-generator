@@ -24,7 +24,7 @@ def markdown_to_html_node(markdown):
 
 def heading_to_html_node(block):
     heading_len = block.split(" ", 1)
-    return LeafNode(f"h{len(heading_len[0])}", heading_len[1])
+    return ParentNode(f"h{len(heading_len[0])}", text_to_children_quote(heading_len[1]))
 
 def code_to_html_node(block):
     list_items = list(filter(lambda x : ((x!="")), block.split("`")))
