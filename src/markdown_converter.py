@@ -31,7 +31,7 @@ def code_to_html_node(block):
     return ParentNode("pre", [LeafNode("code", list_items[0].lstrip("\n"))])
 
 def quote_to_html_node(block):
-    return ParentNode("blockquote", text_to_children(block))
+    return ParentNode("blockquote", text_to_children_quote(block))
 
 def paragraph_to_html_node(block):
     return ParentNode("p", text_to_children(block))
@@ -45,12 +45,23 @@ def list_to_html_node(block, list_type):
         tag = "ol"
     parentNode = ParentNode(tag, [])
     for li in list_items:
-        li = li.split("- ", 1)[1]
+        if list_type == BlockType.UNORDERED_LIST:
+            li = li.split("- ", 1)[1]
+        elif list_type == BlockType.ORDERED_LIST:
+            li = li.split(" ", 1)[1]
         parentNode.children.append(LeafNode("li", li))
     return parentNode
 
 
 def text_to_children(block):
+    text_nodes = text_to_textnodes(block)
+    html_nodes = []
+    for t_node in text_nodes:
+        html_nodes.append(text_node_to_html_node(t_node))
+    return html_nodes
+
+def text_to_children_quote(block):
+    block = block.replace("> ", "").replace(">\n","\n")
     text_nodes = text_to_textnodes(block)
     html_nodes = []
     for t_node in text_nodes:
