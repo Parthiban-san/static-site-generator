@@ -2,7 +2,7 @@ from textnode import TextType, TextNode
 from htmlnode import *
 from delimiter import *
 from markdown_converter import *
-import os, shutil
+import os, shutil, sys
 
 def copy_static_to_public():
     source_path = "./static"
@@ -43,7 +43,7 @@ def extract_title(markdown):
         html_title = md_title[0].split(" ", 1)[1]
     return html_title.strip()
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, base_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     with open(from_path, 'r') as md_file:
         md_content = md_file.read()
@@ -53,24 +53,29 @@ def generate_page(from_path, template_path, dest_path):
     html_title = extract_title(from_path)
     final_html = template_content.replace(r"{{ Title }}", html_title)
     final_html = final_html.replace(r"{{ Content }}", md_html)
+    final_html = final_html.replace(f"href=\"/", f"href=\"{base_path}")
+    final_html = final_html.replace(f"src=\"/", f"src=\"{base_path}")
     with open(dest_path, "w") as dest_file:
         dest_file.write(final_html)
 
-def generate_pages_recursive(from_path = "content", dest_path = "public"):
+def generate_pages_recursive(base_path, from_path = "content", dest_path = "public"):
     if not os.path.exists(dest_path):
         os.mkdir(dest_path)
     for item in os.listdir(from_path):
         item_path = os.path.join(from_path, item)
         if os.path.isfile(item_path) or os.path.islink(item_path):
-            generate_page(item_path, "template.html", os.path.join(dest_path, "index.html"))
+            generate_page(item_path, "template.html", os.path.join(dest_path, "index.html"), base_path)
         elif os.path.isdir(item_path):
-            generate_pages_recursive(item_path, item_path.replace("content", "public"))
+            generate_pages_recursive(base_path, item_path, item_path.replace("content", "public"))
 
     pass
 
-def main():
+def main(base_path):
     copy_static_to_public()
-    generate_pages_recursive()
+    generate_pages_recursive(base_path)
 
 if __name__ == "__main__":
-    main()
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    main(basepath)
