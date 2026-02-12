@@ -4,9 +4,9 @@ from delimiter import *
 from markdown_converter import *
 import os, shutil, sys
 
-def copy_static_to_public():
+def copy_static_to_docs():
     source_path = "./static"
-    dest_path = "./public"
+    dest_path = "./docs"
     if os.path.exists(dest_path):
         delete_files(dest_path)
     else:
@@ -58,7 +58,7 @@ def generate_page(from_path, template_path, dest_path, base_path):
     with open(dest_path, "w") as dest_file:
         dest_file.write(final_html)
 
-def generate_pages_recursive(base_path, from_path = "content", dest_path = "public"):
+def generate_pages_recursive(base_path, from_path = "content", dest_path = "docs"):
     if not os.path.exists(dest_path):
         os.mkdir(dest_path)
     for item in os.listdir(from_path):
@@ -66,12 +66,12 @@ def generate_pages_recursive(base_path, from_path = "content", dest_path = "publ
         if os.path.isfile(item_path) or os.path.islink(item_path):
             generate_page(item_path, "template.html", os.path.join(dest_path, "index.html"), base_path)
         elif os.path.isdir(item_path):
-            generate_pages_recursive(base_path, item_path, item_path.replace("content", "public"))
+            generate_pages_recursive(base_path, item_path, item_path.replace("content", "docs"))
 
     pass
 
 def main(base_path):
-    copy_static_to_public()
+    copy_static_to_docs()
     generate_pages_recursive(base_path)
 
 if __name__ == "__main__":
