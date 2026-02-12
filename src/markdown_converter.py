@@ -49,7 +49,7 @@ def list_to_html_node(block, list_type):
             li = li.split("- ", 1)[1]
         elif list_type == BlockType.ORDERED_LIST:
             li = li.split(" ", 1)[1]
-        parentNode.children.append(LeafNode("li", li))
+        parentNode.children.append(ParentNode("li", text_to_children(li)))
     return parentNode
 
 
