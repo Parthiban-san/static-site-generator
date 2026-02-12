@@ -68,8 +68,6 @@ def generate_pages_recursive(base_path, from_path = "content", dest_path = "docs
         elif os.path.isdir(item_path):
             generate_pages_recursive(base_path, item_path, item_path.replace("content", "docs"))
 
-    pass
-
 def main(base_path):
     copy_static_to_docs()
     generate_pages_recursive(base_path)
